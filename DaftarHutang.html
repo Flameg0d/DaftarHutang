@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Hutang/Piutang</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        let catatan = [];
+        let editIndex = -1;
+
+        function renderTable() {
+            const catatanTable = document.getElementById('catatanTable');
+            catatanTable.innerHTML = '';
+
+            catatan.forEach((item, index) => {
+                const row = 
+                    <tr>
+                        <td class="border px-4 py-2">${item.nama}</td>
+                        <td class="border px-4 py-2">${item.jenis}</td>
+                        <td class="border px-4 py-2">${item.nominal}</td>
+                        <td class="border px-4 py-2">${item.status}</td>
+                        <td class="border px-4 py-2">
+                            <button onclick="editCatatan(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
+                            <button onclick="hapusCatatan(${index})" class="bg-red-500 text-white px-2 py-1 rounded">Hapus</button>
+                        </td>
+                    </tr>
+                ;
+                catatanTable.innerHTML += row;
+            });
+
+            updateRekap();
+        }
+
+        function updateRekap() {
+            const totalHutang = catatan
+                .filter(item => item.jenis === 'hutang')
+                .reduce((total, item) => total + item.nominal, 0);
+            const totalPiutang = catatan
+                .filter(item => item.jenis === 'piutang')
+                .reduce((total, item) => total + item.nominal, 0);
+
+            const rekap = 
+                <p>Total Hutang: ${totalHutang}</p>
+                <p>Total Piutang: ${totalPiutang}</p>
+            ;
+            document.getElementById('rekap').innerHTML = rekap;
+        }
+
+        function editCatatan(index) {
+            const item = catatan[index];
+            document.getElementById('nama').value = item.nama;
+            document.getElementById('jenis').value = item.jenis;
+            document.getElementById('nominal').value = item.nominal;
+            document.getElementById('status').value = item.status;
+            editIndex = index;
+            document.getElementById('editIndex').value = index;
+        }
+
+        function hapusCatatan(index) {
+            catatan.splice(index, 1);
+            renderTable();
+        }
+
+        function simpanCatatan(e) {
+            e.preventDefault();
+            const nama = document.getElementById('nama').value;
+            const jenis = document.getElementById('jenis').value;
+            const nominal = parseFloat(document.getElementById('nominal').value);
+            const status = document.getElementById('status').value;
+
+            if (editIndex === -1) {
+                catatan.push({ nama, jenis, nominal, status });
+            } else {
+                catatan[editIndex] = { nama, jenis, nominal, status };
+                editIndex = -1;
+                document.getElementById('editIndex').value = -1;
+            }
+
+            document.getElementById('form').reset();
+            renderTable();
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-5">
+        <h1 class="text-2xl font-bold mb-5">Catatan Hutang/Piutang</h1>
+
+        <form id="form" class="mb-5" onsubmit="simpanCatatan(event)">
+            <input type="hidden" id="editIndex" value="-1">
+            <div class="mb-4">
+                <label class="block text-gray-700">Nama:</label>
+                <input type="text" id="nama" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Jenis:</label>
+                <select id="jenis" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+                    <option value="hutang">Hutang</option>
+                     <option value="piutang">Piutang</option>
+                     </select>
+                     </div>
+                     <div class="mb-4">
+                     <label class="block text-gray-700">Nominal:</label>
+                     <input type="number" id="nominal" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+                     </div>
+                    <div class="mb-4">
+                     <label class="block text-gray-700">Status:</label>
+                     <select id="status" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+                     <option value="belum dibayar">Belum Dibayar</option>
+                     <option value="sudah dibayar">Sudah Dibayar</option>
+                     </select>
+                     </div>
+                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+                     </form>
+                    
+                     <h2 class="text-xl font-bold mb-3">Daftar Catatan</h2>
+                     <table class="min-w-full bg-white border border-gray-300">
+                     <thead>
+                     <tr>
+                     <th class="border px-4 py-2">Nama</th>
+                     <th class="border px-4 py-2">Jenis</th>
+                     <th class="border px-4 py-2">Nominal</th>
+                     <th class="border px-4 py-2">Status</th>
+                     <th class="border px-4 py-2">Aksi</th>
+                     </tr>
+                     </thead>
+                     <tbody id="catatanTable">
+                     <!-- Data akan ditambahkan di sini -->
+                     </tbody>
+                     </table>
+                    
+                     <h2 class="text-xl font-bold mt-5">Rekap</h2>
+                     <div id="rekap" class="mt-2">
+                     <!-- Rekap akan ditampilkan di sini -->
+                     </div>
+                     </div>
+                    </body>
+                    </html>
