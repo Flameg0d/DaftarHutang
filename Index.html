@@ -1,1 +1,63 @@
-index
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Hutang/Piutang</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script defer src="script.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-5">
+        <h1 class="text-2xl font-bold mb-5">Catatan Hutang/Piutang</h1>
+
+        <form id="form" class="mb-5">
+            <input type="hidden" id="editIndex" value="-1">
+            <div class="mb-4">
+                <label class="block text-gray-700">Nama:</label>
+                <input type="text" id="nama" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Jenis:</label>
+                <select id="jenis" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+                    <option value="hutang">Hutang</option>
+                    <option value="piutang">Piutang</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Nominal:</label>
+                <input type="number" id="nominal" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Status:</label>
+                <select id="status" class="mt-1 block w-full p-2 border border-gray-300 rounded" required>
+                    <option value="belum dibayar">Belum Dibayar</option>
+                    <option value="sudah dibayar">Sudah Dibayar</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+        </form>
+
+        <h2 class="text-xl font-bold mb-3">Daftar Catatan</h2>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border px-4 py-2">Nama</th>
+                    <th class="border px-4 py-2">Jenis</th>
+                    <th class="border px-4 py-2">Nominal</th>
+                    <th class="border px-4 py-2">Status</th>
+                    <th class="border px-4 py-2">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="catatanTable">
+                <!-- Data akan ditambahkan di sini -->
+            </tbody>
+        </table>
+
+        <h2 class="text-xl font-bold mt-5">Rekap</h2>
+        <div id="rekap" class="mt-2">
+            <!-- Rekap akan ditampilkan di sini -->
+        </div>
+    </div>
+</body>
+</html>
